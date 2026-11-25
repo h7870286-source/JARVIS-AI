@@ -38,18 +38,24 @@ jobs:
         run: |
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Extract Android project
+            - name: Extract Android project
         run: |
           unzip -q JARVIS_AI_Complete_Source236.zip
-          test -f JARVIS_AI_Complete_Source/settings.gradle.kts
+          SETTINGS_FILE="$(find . -name settings.gradle.kts -print -quit)"
+          if [ -z "$SETTINGS_FILE" ]; then
+            echo "Could not find settings.gradle.kts in extracted ZIP"
+            exit 1
+          fi
+          PROJECT_DIR="$(dirname "$SETTINGS_FILE")"
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
 
       - name: Build APK
         run: |
-          gradle --no-daemon -p JARVIS_AI_Complete_Source assembleDebug
+          gradle --no-daemon -p "$PROJECT_DIR" assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: HUNTER-AI-debug-apk
-          path: JARVIS_AI_Complete_Source/app/build/outputs/apk/debug/*.apk
+          path: "**/app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
