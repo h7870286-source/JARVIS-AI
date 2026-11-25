@@ -38,7 +38,7 @@ jobs:
         run: |
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
-            - name: Extract Android project
+      - name: Extract Android project
         run: |
           unzip -q JARVIS_AI_Complete_Source236.zip
           SETTINGS_FILE="$(find . -name settings.gradle.kts -print -quit)"
