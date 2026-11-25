@@ -1,0 +1,54 @@
+
+name: HUNTER AI Android APK Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download project
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.13"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK
+        run: |
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Extract Android project
+        run: |
+          unzip -q JARVIS_AI_Complete_Source_v2.zip
+          test -f JARVIS_AI_Complete_Source/settings.gradle.kts
+
+      - name: Build APK
+        run: |
+          gradle --no-daemon -p JARVIS_AI_Complete_Source assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HUNTER-AI-debug-apk
+          path: JARVIS_AI_Complete_Source/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
