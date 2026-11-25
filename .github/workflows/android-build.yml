@@ -40,7 +40,7 @@ jobs:
 
       - name: Extract Android project
         run: |
-          unzip -q HUNTER_AI_FIXED.zip
+          unzip -q "HUNTER_AI_FIXED.zip .zip"
           SETTINGS_FILE="$(find . -name settings.gradle.kts -print -quit)"
           if [ -z "$SETTINGS_FILE" ]; then
             echo "Could not find settings.gradle.kts in extracted ZIP"
