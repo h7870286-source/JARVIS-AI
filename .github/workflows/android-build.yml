@@ -31,16 +31,16 @@ jobs:
           gradle-version: "8.13"
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v3     
         with:
-                   packages: platform-tools
+             packages: platform-tools
       - name: Install Android SDK
         run: |
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
       - name: Extract Android project
         run: |
-          unzip -q JARVIS_AI_Complete_Source_v2.zip
+          unzip -q JARVIS_AI_Complete_Source.zip
           test -f JARVIS_AI_Complete_Source/settings.gradle.kts
 
       - name: Build APK
